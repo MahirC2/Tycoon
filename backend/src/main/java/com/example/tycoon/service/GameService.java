@@ -5,6 +5,7 @@ import com.example.tycoon.model.UpgradeState;
 import com.example.tycoon.model.UpgradeType;
 import com.example.tycoon.model.UpgradeView;
 import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -65,6 +66,22 @@ public class GameService {
         return BASE_CASH_PER_CLICK + upgrades.values().stream()
                 .mapToDouble(state -> state.getType().getBonusPerLevel() * state.getLevel())
                 .sum();
+    }
+
+    private double autoTapEarningsPerSecond() {
+        return upgrades.values().stream()
+                .filter(state -> state.getType() == UpgradeType.AUTO_TAP)
+                .mapToDouble(state -> state.getType().getBonusPerLevel() * state.getLevel())
+                .sum();
+    }
+
+
+    @Scheduled(fixedRate = 1000)
+    private synchronized void applyAutoTapEarnings() {
+        double earnings = autoTapEarningsPerSecond();
+        if (earnings > 0) {
+            cash += earnings;
+        }
     }
 
     private double round(double value) {

@@ -97,7 +97,7 @@ export default function App() {
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-tr from-brand-500 to-brand-700 animate-pulse" />
-          <p className="text-slate-300 text-lg tracking-wide">Bootstrapping your empire...</p>
+          <p className="text-slate-300 text-lg tracking-wide">Bootstrapping...</p>
         </div>
       </div>
     );
@@ -113,7 +113,7 @@ export default function App() {
         <header className="px-6 py-10 sm:px-16">
           <div className="mx-auto max-w-5xl">
             <h1 className="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-white">
-              Empire Tycoon
+              Tycoon
             </h1>
             <p className="mt-4 max-w-2xl text-base sm:text-lg text-slate-300">
               Grow your futuristic conglomerate by investing in strategic upgrades. Earn cash, unlock automation, and
