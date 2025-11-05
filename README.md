@@ -1,4 +1,4 @@
-# Empire Tycoon
+# Tycoon
 
 A lightweight Java + TypeScript full-stack clicker/tycoon simulation. The Spring Boot backend maintains game state and exposes a simple REST API, while the Vite + React frontend renders a modern interface for growing your empire.
 
