@@ -81,18 +81,32 @@ export default function App() {
     }
   }, []);
 
+  const availableUpgrades = useMemo<Upgrade[]>(() => {
+        if (!state) {
+            return [];
+        }
+        return state.upgrades.filter(
+            (upgrade) => upgrade.id !== "auto-tap" || upgrade.level === 0
+        );
+    }, [state]);
+
   const cashProgress = useMemo(() => {
     if (!state) {
       return 0;
     }
-    const cheapestUpgrade = state.upgrades.reduce(
-      (min, current) => Math.min(min, current.cost),
-      Number.MAX_VALUE
-    );
-    return Math.min(1, state.cash / cheapestUpgrade);
-  }, [state]);
+      const relevantUpgrades =
+          availableUpgrades.length > 0 ? availableUpgrades : state.upgrades;
+      const cheapestUpgrade = relevantUpgrades.reduce(
+          (min, current) => Math.min(min, current.cost),
+          Number.MAX_VALUE
+      );
+      if (cheapestUpgrade === Number.MAX_VALUE) {
+          return 1;
+      }
+      return Math.min(1, state.cash / cheapestUpgrade);
+  }, [availableUpgrades, state]);
 
-  const hasPassiveIncome = useMemo(() => {
+    const hasPassiveIncome = useMemo(() => {
         if (!state) {
             return false;
         }
@@ -101,7 +115,7 @@ export default function App() {
         );
     }, [state]);
 
-  useEffect(() => {
+    useEffect(() => {
         if (!hasPassiveIncome) {
             return;
         }
@@ -113,7 +127,8 @@ export default function App() {
         }, 1000);
 
         return () => clearInterval(interval);
-  }, [hasPassiveIncome, loadState]);
+    }, [hasPassiveIncome, loadState]);
+
 
   if (!state) {
     return (
@@ -211,7 +226,7 @@ export default function App() {
               </div>
 
               <div className="grid gap-4">
-                {state.upgrades.map((upgrade) => {
+                {availableUpgrades.map((upgrade) => {
                   const affordable = state.cash >= upgrade.cost;
                   return (
                     <article

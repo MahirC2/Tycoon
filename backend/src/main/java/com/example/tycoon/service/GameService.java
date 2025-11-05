@@ -41,6 +41,9 @@ public class GameService {
     public synchronized GameState purchaseUpgrade(String upgradeId) {
         UpgradeType type = UpgradeType.fromId(upgradeId);
         UpgradeState state = upgrades.get(type);
+        if (type == UpgradeType.AUTO_TAP && state.getLevel() > 0) {
+            throw new IllegalStateException("Auto Tap can only be purchased once");
+        }
         double cost = state.getCurrentCost();
         if (cash < cost) {
             throw new IllegalStateException("Not enough cash to purchase upgrade");
@@ -69,10 +72,11 @@ public class GameService {
     }
 
     private double autoTapEarningsPerSecond() {
-        return upgrades.values().stream()
-                .filter(state -> state.getType() == UpgradeType.AUTO_TAP)
-                .mapToDouble(state -> state.getType().getBonusPerLevel() * state.getLevel())
-                .sum();
+        UpgradeState autoTap = upgrades.get(UpgradeType.AUTO_TAP);
+        if (autoTap != null && autoTap.getLevel() > 0) {
+            return getCashPerClick();
+        }
+        return 0;
     }
 
 

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum UpgradeType {
     FASTER_CLICKER("faster-clicker", "Faster Clicker", 10, 1.15, 1),
-    AUTO_TAP("auto-tap", "Auto Tap", 50, 1.18, 3),
+    AUTO_TAP("auto-tap", "Auto Tap", 10_000, 1.0, 3),
     INVESTMENT_BANK("investment-bank", "Investment Bank", 200, 1.22, 8),
     VENTURE_CAPITAL("venture-capital", "Venture Capital", 1000, 1.3, 20);
 
