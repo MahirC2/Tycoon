@@ -92,6 +92,29 @@ export default function App() {
     return Math.min(1, state.cash / cheapestUpgrade);
   }, [state]);
 
+  const hasPassiveIncome = useMemo(() => {
+        if (!state) {
+            return false;
+        }
+        return state.upgrades.some(
+            (upgrade) => upgrade.id === "auto-tap" && upgrade.level > 0
+        );
+    }, [state]);
+
+  useEffect(() => {
+        if (!hasPassiveIncome) {
+            return;
+        }
+
+        const interval = setInterval(() => {
+            loadState().catch((err) =>
+                setError(err instanceof Error ? err.message : "Unexpected error")
+            );
+        }, 1000);
+
+        return () => clearInterval(interval);
+  }, [hasPassiveIncome, loadState]);
+
   if (!state) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
